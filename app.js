@@ -36,7 +36,11 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/accounts', require('./routes/accounts'));
+app.use('/account', require('./routes/accounts'));
+app.use('/cluster', require('./routes/clusters'));
+app.use('/task', require('./routes/tasks'));
+app.use('/shop', require('./routes/shops'));
+app.use('/authenticator', require('./routes/authenticator'));
 // app.use('/users', usersRouter);
 
 module.exports = app;
