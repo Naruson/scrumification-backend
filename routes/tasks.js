@@ -91,6 +91,7 @@ router.post('/cluster', async(req, res) => {
         };
 
         let updateCluster = await client.db(DB_NAME).collection('clusters').updateOne({ _id: c_id }, { $push: { task_transactions: newTaskTransaction } });
+        let updatePoint = await client.db(DB_NAME).collection('clusters').updateOne({ _id: c_id }, { $inc: { point: req.body.point } });
         await client.close();
 
         res.status(200).send({
