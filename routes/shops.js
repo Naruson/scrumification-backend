@@ -33,7 +33,7 @@ router.get('/notification', async function(req, res) {
         res.status(200).send({
             "status": "ok",
             "message": "Get notification successfully",
-            "notification": notifications
+            "notification": notifications.reverse()
         });
 
     } catch (e) {
@@ -50,13 +50,13 @@ router.post('/buy/:id', async function(req, res) {
     try {
 
         // api buy shop
-        //receive param:id
-        //        body: cluster_id,
+        //receive param:itemid
+        //        body: clusterId,
 
         const client = new MongoClient(uri);
         await client.connect();
         var o_id = new ObjectId(req.params.id);
-        var c_id = new ObjectId(req.body.cluster_id);
+        var c_id = new ObjectId(req.body.clusterId);
         let shop = await dbCollection.findOne({ _id: o_id })
 
         await client.db(DB_NAME).collection('clusters').updateOne({

@@ -8,6 +8,8 @@ const dbCollection = client.db(DB_NAME).collection('clusters');
 const accountModel = require('../models/Account');
 const ObjectId = require('mongodb').ObjectId;
 
+
+
 router.get('/schema-example', function(req, res) {
     accountModel.find((error, data) => {
         if (error) {
@@ -51,7 +53,7 @@ router.get('/task/:id', async(req, res) => {
 
         res.status(200).send({
             "status": "ok",
-            "message": "Get cluster successfully",
+            "message": "Get cluster task successfully",
             "tasks": tasks
         });
     } catch (error) {
@@ -98,6 +100,31 @@ router.get('/:id', async(req, res) => {
             "status": "ok",
             "message": "Get clusters successfully",
             "cluster": cluster
+        });
+    } catch (error) {
+        res.status(400);
+        return res.json({
+            status: false,
+            data: "error",
+            errorDetail: error.toString(),
+        });
+    }
+});
+
+
+router.get('/points', async(req, res) => {
+    try {
+        const client = new MongoClient(uri);
+        await client.connect();
+        let clusters = await dbCollection.find();
+        client.close();
+
+        res.send(clusters);
+
+        res.status(200).send({
+            "status": "ok",
+            "message": "Get clusters successfully",
+            "clusters": clusters
         });
     } catch (error) {
         res.status(400);
