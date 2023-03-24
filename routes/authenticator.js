@@ -21,20 +21,20 @@ const jwtOptions = {
 
 const jwtAuth = new JwtStrategy(jwtOptions, (payload, done) => {
     try {
-        MongoClient.connect(uri, function(err, client) {
+        // MongoClient.connect(uri, function(err, client) {
+        //     if (err) throw err;
+        dbCollection.findOne({
+            'id': payload.sub.id,
+        }, function(err, result) {
             if (err) throw err;
-            dbCollection.findOne({
-                'id': payload.sub.id,
-            }, function(err, result) {
-                if (err) throw err;
-                if (result === null) {
-                    done(null, false);
-                } else {
-                    done(null, true);
-                }
-                client.close();
-            });
+            if (result === null) {
+                done(null, false);
+            } else {
+                done(null, true);
+            }
+            // client.close();
         });
+        // });
     } catch (error) {
         res.status(400);
         return res.json({
@@ -59,21 +59,34 @@ const loginMiddleWare = (req, res, next) => {
         hash.update(password);
         const hashedPassword = hash.digest('hex');
 
-        MongoClient.connect(uri, function(err, client) {
+        // let login = dbCollection.findOne({
+        //     'username': bank.username,
+        //     'password': hashedPassword
+        // });
+
+        // if (login === null) {
+        //     res.status(400).send('Wrong username or password');
+        // } else if (err) {
+        //     throw err;
+        // } else {
+        //     next();
+        // }
+
+        // MongoClient.connect(uri, function(err, client) {
+        //     if (err) throw err;
+        dbCollection.findOne({
+            'username': bank.username,
+            'password': hashedPassword
+        }, function(err, result) {
             if (err) throw err;
-            dbCollection.findOne({
-                'username': bank.username,
-                'password': hashedPassword
-            }, function(err, result) {
-                if (err) throw err;
-                if (result === null) {
-                    res.status(400).send('Wrong username or password');
-                } else {
-                    next();
-                }
-                client.close();
-            });
+            if (result === null) {
+                res.status(400).send('Wrong username or password');
+            } else {
+                next();
+            }
+            // client.close();
         });
+        // });
     } catch (error) {
         res.status(400);
         return res.json({
@@ -91,8 +104,6 @@ router.post("/login", loginMiddleWare, async(req, res) => {
         hash.update(password);
         const hashedPassword = hash.digest('hex');
 
-        const client = new MongoClient(uri);
-        await client.connect();
         let account = await dbCollection.findOne({
             'username': req.body.username,
             'password': hashedPassword
@@ -124,8 +135,8 @@ router.post("/register", async(req, res) => {
         hash.update(password);
         const hashedPassword = hash.digest('hex');
 
-        const client = new MongoClient(uri);
-        await client.connect();
+        // const client = new MongoClient(uri);
+        // await client.connect();
 
         let cluster = await client.db(DB_NAME).collection('clusters').findOne({ name: req.body.cluster })
 
@@ -139,7 +150,7 @@ router.post("/register", async(req, res) => {
 
 
 
-        client.close();
+        // client.close();
         res.send(account);
     } catch (error) {
         res.status(400);

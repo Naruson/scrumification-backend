@@ -22,10 +22,10 @@ router.get('/schema-example', function(req, res) {
 
 router.get('/raw-example', async(req, res) => {
     try {
-        const client = new MongoClient(uri);
-        await client.connect();
+        // const client = new MongoClient(uri);
+        // await client.connect();
         let clusters = await dbCollection.findAll({})
-        client.close();
+            // client.close();
 
         res.status(200).send({
             "status": "ok",
@@ -45,11 +45,11 @@ router.get('/raw-example', async(req, res) => {
 
 router.get('/task/:id', async(req, res) => {
     try {
-        const client = new MongoClient(uri);
-        await client.connect();
+        // const client = new MongoClient(uri);
+        // await client.connect();
         var o_id = new ObjectId(req.params.id);
         let tasks = await dbCollection.findOne({ _id: o_id })
-        client.close();
+            // client.close();
 
         res.status(200).send({
             "status": "ok",
@@ -68,10 +68,10 @@ router.get('/task/:id', async(req, res) => {
 
 router.get('/', async(req, res) => {
     try {
-        const client = new MongoClient(uri);
-        await client.connect();
+        // const client = new MongoClient(uri);
+        // await client.connect();
         let clusters = await dbCollection.find({}).toArray();
-        client.close();
+        // client.close();
 
         res.status(200).send({
             "status": "ok",
@@ -90,11 +90,10 @@ router.get('/', async(req, res) => {
 
 router.get('/:id', async(req, res) => {
     try {
-        const client = new MongoClient(uri);
-        await client.connect();
+        // const client = new MongoClient(uri);
         const o_id = new ObjectId(req.params.id);
         let cluster = await dbCollection.findOne({ _id: o_id });
-        client.close();
+        // client.close();
 
         res.status(200).send({
             "status": "ok",
@@ -114,12 +113,10 @@ router.get('/:id', async(req, res) => {
 
 router.get('/points', async(req, res) => {
     try {
-        const client = new MongoClient(uri);
-        await client.connect();
+        // const client = new MongoClient(uri);
         let clusters = await dbCollection.find();
-        client.close();
+        // client.close();
 
-        res.send(clusters);
 
         res.status(200).send({
             "status": "ok",

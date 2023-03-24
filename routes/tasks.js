@@ -23,11 +23,11 @@ router.get('/schema-example', function(req, res) {
 
 router.get('/', async(req, res) => {
     try {
-        const client = new MongoClient(uri);
-        await client.connect();
+        // const client = new MongoClient(uri);
+        // await client.connect();
         let tasks = await dbCollection.find().toArray();
 
-        await client.close();
+        // await client.close();
         res.status(200).send({
             "status": "ok",
             "message": "Get tasks successfully",
@@ -45,11 +45,10 @@ router.get('/', async(req, res) => {
 
 router.get('/:taskId', async(req, res) => {
     try {
-        const client = new MongoClient(uri);
-        await client.connect();
+        // const client = new MongoClient(uri);
         const o_id = new ObjectId(req.params.taskId);
         let task = await dbCollection.findOne({ _id: o_id });
-        await client.close();
+        // await client.close();
 
         res.status(200).send({
             "status": "ok",
@@ -72,8 +71,8 @@ router.post('/cluster', async(req, res) => {
         //receive
         // body: clusterId,taskId,point createdAt
 
-        const client = new MongoClient(uri);
-        await client.connect();
+        // const client = new MongoClient(uri);
+        // await client.connect();
         const t_id = new ObjectId(req.body.taskId);
         const c_id = new ObjectId(req.body.clusterId);
         let task = await dbCollection.findOne({ _id: t_id });
@@ -92,7 +91,7 @@ router.post('/cluster', async(req, res) => {
 
         let updateCluster = await client.db(DB_NAME).collection('clusters').updateOne({ _id: c_id }, { $push: { task_transactions: newTaskTransaction } });
         let updatePoint = await client.db(DB_NAME).collection('clusters').updateOne({ _id: c_id }, { $inc: { point: req.body.point } });
-        await client.close();
+        // await client.close();
 
         res.status(200).send({
             "status": "ok",

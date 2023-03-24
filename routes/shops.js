@@ -26,9 +26,9 @@ router.get('/', function(req, res) {
 
 router.get('/notification', async function(req, res) {
     try {
-        const client = new MongoClient(uri);
+        // const client = new MongoClient(uri);
         const notifications = await client.db(DB_NAME).collection('notifications').find().toArray();
-        client.close();
+        // client.close();
 
         res.status(200).send({
             "status": "ok",
@@ -53,8 +53,8 @@ router.post('/buy/:id', async function(req, res) {
         //receive param:itemid
         //        body: clusterId,
 
-        const client = new MongoClient(uri);
-        await client.connect();
+        // const client = new MongoClient(uri);
+        // await client.connect();
         var o_id = new ObjectId(req.params.id);
         var c_id = new ObjectId(req.body.clusterId);
         let shop = await dbCollection.findOne({ _id: o_id })
@@ -72,7 +72,7 @@ router.post('/buy/:id', async function(req, res) {
             date: new Date().toLocaleString('en-US', { timeZone: process.env.TIME_ZONE }),
         });
 
-        client.close();
+        // client.close();
         res.status(200).send({
             "status": "ok",
             "message": "Buy item successfully",
