@@ -88,6 +88,33 @@ router.get('/', async(req, res) => {
     }
 });
 
+router.get('/points', async(req, res) => {
+    try {
+        // const client = new MongoClient(uri);
+        // let clusters = await dbCollection.find({}, { point: 1, _id: 0 }).toArray();
+
+        let clusters = await dbCollection.find({}, {
+            projection: { point: 1, name: 1 }
+        }).toArray();
+
+        // let clusters = await dbCollection.find({}, { point: 1, _id: 1 }).toArray();
+        // client.close();
+
+        res.status(200).send({
+            "status": "ok",
+            "message": "Get clusters successfully",
+            "clusters": clusters
+        });
+    } catch (error) {
+        res.status(400);
+        return res.json({
+            status: false,
+            data: "error",
+            errorDetail: error.toString(),
+        });
+    }
+});
+
 router.get('/:id', async(req, res) => {
     try {
         // const client = new MongoClient(uri);
@@ -110,27 +137,5 @@ router.get('/:id', async(req, res) => {
     }
 });
 
-
-router.get('/points', async(req, res) => {
-    try {
-        // const client = new MongoClient(uri);
-        let clusters = await dbCollection.find();
-        // client.close();
-
-
-        res.status(200).send({
-            "status": "ok",
-            "message": "Get clusters successfully",
-            "clusters": clusters
-        });
-    } catch (error) {
-        res.status(400);
-        return res.json({
-            status: false,
-            data: "error",
-            errorDetail: error.toString(),
-        });
-    }
-});
 
 module.exports = router;
